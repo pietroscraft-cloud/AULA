@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Sparkles, Menu, X, Check, ShieldCheck, Heart } from 'lucide-react';
+import { ShoppingBag, Sparkles, Menu, X, Check, ShieldCheck, Heart, Leaf } from 'lucide-react';
 import { CartItem } from '../types';
 
 interface NavbarProps {
@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onOpenCart, onOpenConsulta
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FAF8F5]/90 border-b border-[#ECE5DA]/80 transition-all">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FAF8F5]/95 border-b border-[#ECE5DA] transition-all">
       {/* Top Announcement Banner */}
       <div className="bg-[#243329] text-[#F3EFEA] text-xs py-2 px-4 text-center flex items-center justify-center gap-3">
         <span className="inline-flex items-center gap-1.5 font-medium tracking-wide">
@@ -36,16 +36,27 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onOpenCart, onOpenConsulta
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="w-9 h-9 rounded-full bg-[#EFE9DF] border border-[#D5C9B7] flex items-center justify-center text-[#243329]">
-              <span className="font-serif font-light text-xl italic">A</span>
+          {/* Brand Logo - Perfeitamente enquadrado com badge e tipografia fina */}
+          <div 
+            id="brand-logo-aura"
+            className="flex items-center gap-3.5 cursor-pointer select-none group" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-[#243329] to-[#17221A] p-0.5 shadow-sm group-hover:shadow transition-all duration-300">
+              <div className="w-full h-full rounded-[14px] bg-[#FAF8F5] flex items-center justify-center border border-[#E5DBCE]/60">
+                <span className="font-serif italic text-2xl font-light text-[#243329] group-hover:text-[#8C4E2D] transition-colors">
+                  A
+                </span>
+              </div>
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#8C4E2D] border-2 border-[#FAF8F5] flex items-center justify-center shadow-xs">
+                <Leaf className="w-2 h-2 text-white" />
+              </span>
             </div>
-            <div>
-              <span className="font-serif text-2xl tracking-[0.18em] text-[#1E2721] uppercase font-medium">
+            <div className="flex flex-col">
+              <span className="font-serif text-xl sm:text-2xl tracking-[0.18em] text-[#1E2721] uppercase font-medium leading-none">
                 Aura Botânica
               </span>
-              <span className="block text-[10px] uppercase tracking-[0.24em] text-[#69756D] font-sans -mt-1 font-medium">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.26em] text-[#78887F] font-sans font-medium mt-1">
                 Autocuidado Consciente
               </span>
             </div>
@@ -100,26 +111,35 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onOpenCart, onOpenConsulta
               Descobrir Meu Ritual
             </button>
 
-            {/* Cart Button */}
+            {/* Cart Button com Destaque Diferenciado Especial */}
             <button
               id="btn-abrir-carrinho"
               onClick={onOpenCart}
               aria-label="Abrir sacola de autocuidado"
-              className="relative p-2.5 rounded-full border border-[#DFD6C7] bg-[#FAF8F5] hover:bg-[#F0EAE0] text-[#1E2721] transition-colors flex items-center justify-center"
+              className={`relative py-2 px-3.5 sm:px-4 rounded-full border transition-all duration-200 flex items-center gap-2 shadow-xs group ${
+                totalItems > 0 
+                  ? 'border-[#243329] bg-[#243329] text-white hover:bg-[#16211A] shadow-md hover:shadow-lg' 
+                  : 'border-[#D5C9B7] bg-[#F8F4ED] hover:bg-[#EDE5D7] text-[#1E2721]'
+              }`}
             >
-              <ShoppingBag className="w-5 h-5 text-[#2A362E]" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-[#C2744E] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
-                  {totalItems}
-                </span>
-              )}
+              <div className="relative flex items-center justify-center">
+                <ShoppingBag className={`w-4 h-4 sm:w-4.5 sm:h-4.5 transition-transform group-hover:scale-110 ${totalItems > 0 ? 'text-[#E3A882]' : 'text-[#243329]'}`} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2.5 bg-[#8C4E2D] text-white text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-[#243329] shadow-xs animate-pulse">
+                    {totalItems}
+                  </span>
+                )}
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wider hidden sm:inline-block">
+                Sacola {totalItems > 0 ? `(${totalItems})` : ''}
+              </span>
             </button>
 
             {/* Primary Action Button */}
             <button
               id="btn-header-ritual"
               onClick={() => scrollTo('produtos')}
-              className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-[#243329] hover:bg-[#1A261E] text-[#FAF8F5] text-xs font-semibold tracking-wider uppercase transition-all shadow-sm hover:shadow"
+              className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-[#8C4E2D] hover:bg-[#743F24] text-[#FAF8F5] text-xs font-semibold tracking-wider uppercase transition-all shadow-sm hover:shadow"
             >
               Começar Ritual
             </button>

@@ -25,6 +25,7 @@ export default function App() {
   ]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isConsultantOpen, setIsConsultantOpen] = useState<boolean>(false);
+  const [activeProductModal, setActiveProductModal] = useState<Product | null>(null);
 
   const handleAddToCart = (product: Product) => {
     trackAddToCart(product.name, product.price, product.id);
@@ -83,6 +84,17 @@ export default function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleOpenProductModal = (productIdOrStep: string) => {
+    const foundProduct = PRODUCTS_DATA.find(
+      (p) => p.id === productIdOrStep || p.ritualStep?.toLowerCase().includes(productIdOrStep.toLowerCase()) || p.name.toLowerCase().includes(productIdOrStep.toLowerCase())
+    );
+    if (foundProduct) {
+      setActiveProductModal(foundProduct);
+    } else {
+      scrollTo('produtos');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#242A26] flex flex-col selection:bg-[#E2D9CC] selection:text-[#18211D]">
       {/* Navigation Header */}
@@ -105,11 +117,13 @@ export default function App() {
           onAddToCart={handleAddToCart}
           onSelectBundle={handleSelectBundle}
           onBuyNow={handleBuyNow}
+          activeProductModal={activeProductModal}
+          onCloseProductModal={() => setActiveProductModal(null)}
         />
 
         {/* The 3-Step Transformative Self-care Ritual */}
         <SelfcareRitual
-          onSelectProduct={() => scrollTo('produtos')}
+          onSelectProduct={handleOpenProductModal}
         />
 
         {/* Explicitly Requested: Benefits of Organic & Sustainable Ingredients */}

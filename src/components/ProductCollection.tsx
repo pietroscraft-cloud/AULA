@@ -10,17 +10,30 @@ interface ProductCollectionProps {
   onAddToCart: (product: Product) => void;
   onSelectBundle: () => void;
   onBuyNow?: (product: Product) => void;
+  activeProductModal?: Product | null;
+  onCloseProductModal?: () => void;
 }
 
 export const ProductCollection: React.FC<ProductCollectionProps> = ({ 
   onAddToCart, 
   onSelectBundle,
-  onBuyNow 
+  onBuyNow,
+  activeProductModal,
+  onCloseProductModal
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('todos');
   const [sortBy, setSortBy] = useState<'popular' | 'discount' | 'price-asc' | 'price-desc'>('popular');
-  const [selectedProductDetails, setSelectedProductDetails] = useState<Product | null>(null);
+  const [internalProductDetails, setInternalProductDetails] = useState<Product | null>(null);
   const [addedNotice, setAddedNotice] = useState<string | null>(null);
+
+  const selectedProductDetails = activeProductModal !== undefined ? (activeProductModal || internalProductDetails) : internalProductDetails;
+
+  const handleCloseModal = () => {
+    setInternalProductDetails(null);
+    if (onCloseProductModal) {
+      onCloseProductModal();
+    }
+  };
 
   // Countdown timer for sales urgency
   const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 42, seconds: 18 });
@@ -251,6 +264,15 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
 
               <div className="space-y-2 pt-2 border-t border-[#ECE3D5]">
                 <button
+                  id="btn-ver-detalhes-kit-completo"
+                  onClick={() => setInternalProductDetails(featuredBundle)}
+                  className="w-full py-2 rounded-full border border-[#D5C7B3] bg-transparent hover:bg-[#EFE8DC] text-[#425247] text-xs font-semibold uppercase tracking-wider transition-colors flex items-center justify-center gap-2"
+                >
+                  <Eye className="w-3.5 h-3.5 text-[#8C4E2D]" />
+                  <span>Ver Detalhes do Kit</span>
+                </button>
+
+                <button
                   id="btn-comprar-kit-completo-agora"
                   onClick={() => handleDirectBuy(featuredBundle)}
                   className="w-full py-3.5 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs font-semibold uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
@@ -369,7 +391,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
 
                     {/* Quick view button */}
                     <button
-                      onClick={() => setSelectedProductDetails(product)}
+                      onClick={() => setInternalProductDetails(product)}
                       className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-[#FAF8F5]/95 backdrop-blur-sm hover:bg-white text-[#2B3830] flex items-center justify-center transition-all shadow-md group-hover:opacity-100"
                       title="Ver detalhes da fórmula"
                     >
@@ -493,7 +515,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
           <div className="bg-[#FAF8F5] rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-[#D5C7B4] shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
-              onClick={() => setSelectedProductDetails(null)}
+              onClick={handleCloseModal}
               className="absolute top-5 right-5 z-10 p-2 rounded-full bg-[#EFE8DC] hover:bg-[#E2D8C9] text-[#2B372F] transition-colors"
             >
               <X className="w-5 h-5" />
@@ -577,16 +599,29 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                 )}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2.5">
                 <button
+                  id="btn-modal-adicionar-carrinho"
+                  onClick={() => {
+                    handleAdd(selectedProductDetails);
+                    handleCloseModal();
+                  }}
+                  className="px-5 py-3 rounded-full border border-[#C5B59E] bg-[#FAF8F5] hover:bg-[#EFE7DC] text-[#243329] text-xs uppercase tracking-wider font-semibold flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5 text-[#3F634A]" />
+                  <span>Adicionar ao Carrinho</span>
+                </button>
+
+                <button
+                  id="btn-modal-comprar-agora"
                   onClick={() => {
                     handleDirectBuy(selectedProductDetails);
-                    setSelectedProductDetails(null);
+                    handleCloseModal();
                   }}
-                  className="px-6 py-3.5 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs uppercase tracking-wider font-semibold flex items-center gap-2 shadow-md"
+                  className="px-6 py-3 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs uppercase tracking-wider font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
                 >
                   <ShoppingBag className="w-4 h-4 text-[#E3A882]" />
-                  Comprar Agora
+                  <span>Ir Direto ao Pagamento</span>
                 </button>
               </div>
             </div>

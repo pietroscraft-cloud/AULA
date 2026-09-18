@@ -364,6 +364,7 @@ export const RITUAL_STEPS = [
   {
     number: '01',
     step: 'Purificar com Gentileza',
+    productId: 'oleo-limpeza-calmante',
     productTitle: 'Óleo Limpador Botânico Purificante',
     productVolume: '100 ml',
     duration: '1 minuto • Manhã e Noite',
@@ -375,6 +376,7 @@ export const RITUAL_STEPS = [
   {
     number: '02',
     step: 'Nutrir em Camadas Profundas',
+    productId: 'serum-botanico-regenerador',
     productTitle: 'Sérum Regenerador Infinito',
     productVolume: '30 ml',
     duration: '2 minutos • Aplicação por massagem suave',
@@ -386,6 +388,7 @@ export const RITUAL_STEPS = [
   {
     number: '03',
     step: 'Selar a Vitalidade',
+    productId: 'balsamo-hidratante-biomimetico',
     productTitle: 'Bálsamo Facial Biocompatível',
     productVolume: '50 g',
     duration: '1 minuto • Finalização com efeito escudo',

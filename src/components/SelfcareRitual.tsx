@@ -3,7 +3,7 @@ import { RITUAL_STEPS, RITUAL_SKIN_IMAGE } from '../data/content';
 import { Clock, Heart, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface SelfcareRitualProps {
-  onSelectProduct: (stepName: string) => void;
+  onSelectProduct: (productIdOrStep: string) => void;
 }
 
 export const SelfcareRitual: React.FC<SelfcareRitualProps> = ({ onSelectProduct }) => {
@@ -158,10 +158,10 @@ export const SelfcareRitual: React.FC<SelfcareRitualProps> = ({ onSelectProduct 
               <div className="pt-6 border-t border-[#EBE3D7] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <button
                   id={`btn-adicionar-etapa-${activeStep}`}
-                  onClick={() => onSelectProduct(currentStep.step)}
+                  onClick={() => onSelectProduct((currentStep as any).productId || currentStep.step)}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#243329] hover:bg-[#18231C] text-[#FAF8F5] text-xs uppercase tracking-wider font-semibold transition-all shadow-sm"
                 >
-                  <span>Conhecer o Produto Deste Passo</span>
+                  <span>Ver Detalhes do Produto</span>
                   <ArrowRight className="w-3.5 h-3.5 text-[#E3A882]" />
                 </button>
 
