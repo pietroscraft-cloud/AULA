@@ -1,16 +1,29 @@
 import { Product, Ingredient, Testimonial } from '../types';
+import HERO_IMAGE from '../assets/images/aura_hero_skincare_1789769955687.jpg';
+import BOTANICAL_MACRO_IMAGE from '../assets/images/aura_botanical_macro_1789769967149.jpg';
+import RITUAL_SKIN_IMAGE from '../assets/images/aura_ritual_skin_1789769997070.jpg';
+import CREAM_MASK_IMAGE from '../assets/images/aura_cream_mask_1789770231164.jpg';
+import SUN_FLUID_IMAGE from '../assets/images/aura_sun_fluid_1789770241434.jpg';
+import KIT_SET_IMAGE from '../assets/images/skincare_kit_set_1789770450746.jpg';
+import DUO_GLOW_IMAGE from '../assets/images/skincare_duo_glow_1789770499547.jpg';
+import CERAMIC_BALM_IMAGE from '../assets/images/ceramic_face_balm_1789770479885.jpg';
+import CLEANSING_OIL_IMAGE from '../assets/images/cleansing_oil_bottle_1789770460301.jpg';
+import FLORAL_MIST_IMAGE from '../assets/images/floral_mist_spray_1789770468979.jpg';
+import EYE_ELIXIR_IMAGE from '../assets/images/eye_elixir_rollon_1789770488840.jpg';
 
-export const HERO_IMAGE = '/src/assets/images/aura_hero_skincare_1789769955687.jpg';
-export const BOTANICAL_MACRO_IMAGE = '/src/assets/images/aura_botanical_macro_1789769967149.jpg';
-export const RITUAL_SKIN_IMAGE = '/src/assets/images/aura_ritual_skin_1789769997070.jpg';
-export const CREAM_MASK_IMAGE = '/src/assets/images/aura_cream_mask_1789770231164.jpg';
-export const SUN_FLUID_IMAGE = '/src/assets/images/aura_sun_fluid_1789770241434.jpg';
-export const KIT_SET_IMAGE = '/src/assets/images/skincare_kit_set_1789770450746.jpg';
-export const DUO_GLOW_IMAGE = '/src/assets/images/skincare_duo_glow_1789770499547.jpg';
-export const CERAMIC_BALM_IMAGE = '/src/assets/images/ceramic_face_balm_1789770479885.jpg';
-export const CLEANSING_OIL_IMAGE = '/src/assets/images/cleansing_oil_bottle_1789770460301.jpg';
-export const FLORAL_MIST_IMAGE = '/src/assets/images/floral_mist_spray_1789770468979.jpg';
-export const EYE_ELIXIR_IMAGE = '/src/assets/images/eye_elixir_rollon_1789770488840.jpg';
+export {
+  HERO_IMAGE,
+  BOTANICAL_MACRO_IMAGE,
+  RITUAL_SKIN_IMAGE,
+  CREAM_MASK_IMAGE,
+  SUN_FLUID_IMAGE,
+  KIT_SET_IMAGE,
+  DUO_GLOW_IMAGE,
+  CERAMIC_BALM_IMAGE,
+  CLEANSING_OIL_IMAGE,
+  FLORAL_MIST_IMAGE,
+  EYE_ELIXIR_IMAGE,
+};
 
 export const INGREDIENTS_DATA: Ingredient[] = [
   {
