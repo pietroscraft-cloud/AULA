@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --color-linen-50: #FCFBF9;
+  --color-linen-100: #F8F5F0;
+  --color-linen-200: #EFE9DF;
+  --color-linen-300: #E2D8C9;
+  --color-botanic-dark: #17211B;
+  --color-botanic-base: #28382E;
+  --color-botanic-muted: #536257;
+  --color-clay: #C2744E;
+  --color-clay-dark: #A25934;
+}
+
+html {
+  scroll-behavior: smooth;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Aura Botânica - Autocuidado & Beleza Natural",
+  "description": "Landing page de produtos de beleza naturais e orgânicos, focada em transformar a rotina de autocuidado com design minimalista, ingredientes sustentáveis e depoimentos reais.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
