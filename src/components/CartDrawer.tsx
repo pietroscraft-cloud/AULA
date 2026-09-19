@@ -53,8 +53,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   });
   const [orderNumber, setOrderNumber] = useState('');
 
-  if (!isOpen) return null;
-
   const rawSubtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const totalOriginal = cart.reduce((sum, item) => sum + (item.product.originalPrice || item.product.price) * item.quantity, 0);
   const catalogSavings = Math.max(0, totalOriginal - rawSubtotal);
@@ -119,6 +117,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     onClearCart();
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/45 backdrop-blur-xs flex justify-end">

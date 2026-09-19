@@ -19,8 +19,6 @@ export const RoutineConsultant: React.FC<RoutineConsultantProps> = ({
   const [concern, setConcern] = useState<string>('');
   const [sensitivity, setSensitivity] = useState<string>('');
 
-  if (!isOpen) return null;
-
   const resetQuiz = () => {
     setStep(1);
     setSkinType('');
@@ -60,6 +58,8 @@ export const RoutineConsultant: React.FC<RoutineConsultantProps> = ({
   const recommendation = getRecommendation();
   const totalPrice = recommendation.products.reduce((sum, p) => sum + p.price, 0);
   const discountedPrice = Math.round(totalPrice * (1 - recommendation.discountPercent / 100));
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
