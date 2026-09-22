@@ -12,6 +12,8 @@ interface ProductCollectionProps {
   onBuyNow?: (product: Product) => void;
   activeProductModal?: Product | null;
   onCloseProductModal?: () => void;
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
 }
 
 export const ProductCollection: React.FC<ProductCollectionProps> = ({ 
@@ -19,9 +21,20 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   onSelectBundle,
   onBuyNow,
   activeProductModal,
-  onCloseProductModal
+  onCloseProductModal,
+  selectedCategory: externalCategory,
+  onCategoryChange,
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
+  const [internalCategory, setInternalCategory] = useState<string>('todos');
+  const selectedCategory = externalCategory ?? internalCategory;
+
+  const handleSelectCategory = (cat: string) => {
+    setInternalCategory(cat);
+    if (onCategoryChange) {
+      onCategoryChange(cat);
+    }
+  };
+
   const [sortBy, setSortBy] = useState<'popular' | 'discount' | 'price-asc' | 'price-desc'>('popular');
   const [internalProductDetails, setInternalProductDetails] = useState<Product | null>(null);
   const [addedNotice, setAddedNotice] = useState<string | null>(null);
@@ -72,8 +85,8 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   const filteredProducts = PRODUCTS_DATA.filter(p => {
     if (selectedCategory === 'todos') return true;
     if (selectedCategory === 'kits') return p.category === 'kits' || p.isBundle;
-    if (selectedCategory === 'rosto') return p.category === 'rosto';
     if (selectedCategory === 'limpeza') return p.category === 'limpeza';
+    if (selectedCategory === 'hidratacao' || selectedCategory === 'rosto') return p.category === 'hidratacao' || p.category === 'rosto';
     if (selectedCategory === 'solar') return p.category === 'solar';
     if (selectedCategory === 'mascaras') return p.category === 'mascaras';
     return true;
@@ -305,18 +318,18 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
             {[
               { id: 'todos', label: 'Todos os Produtos', count: PRODUCTS_DATA.length },
-              { id: 'kits', label: '⭐ Kits & Ofertas', count: 2 },
-              { id: 'rosto', label: '🌿 Rosto & Olhos', count: 3 },
-              { id: 'limpeza', label: '💧 Limpeza & Névoa', count: 2 },
-              { id: 'solar', label: '☀️ Proteção Mineral', count: 1 },
-              { id: 'mascaras', label: '🌸 Máscaras & Peeling', count: 1 },
+              { id: 'kits', label: '⭐ Kits & Ofertas', count: PRODUCTS_DATA.filter(p => p.category === 'kits' || p.isBundle).length },
+              { id: 'limpeza', label: '💧 Limpeza Diária', count: PRODUCTS_DATA.filter(p => p.category === 'limpeza').length },
+              { id: 'hidratacao', label: '🌿 Hidratação', count: PRODUCTS_DATA.filter(p => p.category === 'hidratacao' || p.category === 'rosto').length },
+              { id: 'solar', label: '☀️ Proteção Solar', count: PRODUCTS_DATA.filter(p => p.category === 'solar').length },
+              { id: 'mascaras', label: '🌸 Máscaras Faciais', count: PRODUCTS_DATA.filter(p => p.category === 'mascaras').length },
             ].map(cat => {
               const active = selectedCategory === cat.id;
               return (
                 <button
                   key={cat.id}
                   id={`tab-categoria-${cat.id}`}
-                  onClick={() => setSelectedCategory(cat.id)}
+                  onClick={() => handleSelectCategory(cat.id)}
                   className={`px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
                     active
                       ? 'bg-[#243329] text-white shadow-sm'
@@ -426,6 +439,24 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                   <div className="mt-3 p-2.5 rounded-xl bg-[#F4EFE6] border border-[#E9DFD2] text-[11px] text-[#3D4B42]">
                     <span className="font-bold text-[#8C4E2D]">Ativo Nobre:</span> {product.heroIngredient}
                   </div>
+
+                  {/* Sensory Notes & Aromatherapy ("exala cheiro pelos olhos") */}
+                  {product.sensoryNotes && (
+                    <div className="mt-2 p-2 rounded-xl bg-[#F7F2EA] border border-[#E7DDD0] text-[11px] text-[#425046] flex items-start gap-1.5">
+                      <span className="text-xs">🌸</span>
+                      <div>
+                        <span className="font-bold text-[#8C4E2D]">Aroma:</span>{' '}
+                        <span className="italic">{product.sensoryNotes}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {product.texture && (
+                    <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-[#5C6B61] px-1">
+                      <span className="font-semibold text-[#243329]">Textura:</span>
+                      <span className="truncate">{product.texture}</span>
+                    </div>
+                  )}
 
                   {/* Stock / Urgency Note if available */}
                   {product.urgencyNote && (
@@ -574,6 +605,30 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                 ))}
               </ul>
             </div>
+
+            {/* Sensory Experience Highlight in Modal */}
+            {(selectedProductDetails.sensoryNotes || selectedProductDetails.texture || selectedProductDetails.aromatherapy) && (
+              <div className="mt-4 p-4 rounded-xl bg-[#F8F5EF] border border-[#E4D7C7] space-y-2">
+                <span className="text-xs uppercase tracking-wider font-bold text-[#8C4E2D] block flex items-center gap-1.5">
+                  <span>🌸</span> Experiência Sensorial & Olfativa
+                </span>
+                {selectedProductDetails.sensoryNotes && (
+                  <p className="text-xs text-[#38463D]">
+                    <strong>Aroma Botânico:</strong> <em>"{selectedProductDetails.sensoryNotes}"</em>
+                  </p>
+                )}
+                {selectedProductDetails.texture && (
+                  <p className="text-xs text-[#38463D]">
+                    <strong>Sensação ao Toque:</strong> {selectedProductDetails.texture}
+                  </p>
+                )}
+                {selectedProductDetails.aromatherapy && (
+                  <p className="text-xs text-[#38463D]">
+                    <strong>Efeito no Sistema Nervoso:</strong> {selectedProductDetails.aromatherapy}
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="mt-4 text-xs text-[#526056] space-y-1">
               <p><strong>Ativo Nobre Principal:</strong> {selectedProductDetails.heroIngredient}</p>

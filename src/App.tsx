@@ -15,6 +15,7 @@ import { FaqSection } from './components/FaqSection';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { RoutineConsultant } from './components/RoutineConsultant';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { CartItem, Product } from './types';
 import { PRODUCTS_DATA } from './data/content';
 import { trackAddToCart } from './utils/analytics';
@@ -26,6 +27,7 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isConsultantOpen, setIsConsultantOpen] = useState<boolean>(false);
   const [activeProductModal, setActiveProductModal] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
 
   const handleAddToCart = (product: Product) => {
     trackAddToCart(product.name, product.price, product.id);
@@ -84,6 +86,12 @@ export default function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleGoToPromotions = (category?: string) => {
+    setSelectedCategory(category || 'kits');
+    setIsConsultantOpen(false);
+    scrollTo('produtos');
+  };
+
   const handleOpenProductModal = (productIdOrStep: string) => {
     const foundProduct = PRODUCTS_DATA.find(
       (p) => p.id === productIdOrStep || p.ritualStep?.toLowerCase().includes(productIdOrStep.toLowerCase()) || p.name.toLowerCase().includes(productIdOrStep.toLowerCase())
@@ -96,7 +104,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#242A26] flex flex-col selection:bg-[#E2D9CC] selection:text-[#18211D]">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#242A26] flex flex-col selection:bg-[#E2D9CC] selection:text-[#18211D] pb-16 sm:pb-0">
       {/* Navigation Header */}
       <Navbar
         cart={cart}
@@ -119,9 +127,11 @@ export default function App() {
           onBuyNow={handleBuyNow}
           activeProductModal={activeProductModal}
           onCloseProductModal={() => setActiveProductModal(null)}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
         />
 
-        {/* The 3-Step Transformative Self-care Ritual */}
+        {/* The 4-Step Transformative Self-care Ritual */}
         <SelfcareRitual
           onSelectProduct={handleOpenProductModal}
         />
@@ -156,11 +166,24 @@ export default function App() {
         onClearCart={handleClearCart}
       />
 
-      {/* Interactive Routine Skin Diagnostic Quiz Modal */}
+      {/* Interactive Routine Skin Diagnostic Quiz Modal with Quest and Promo Redirection */}
       <RoutineConsultant
         isOpen={isConsultantOpen}
         onClose={() => setIsConsultantOpen(false)}
         onAddRecommendedKit={handleAddRecommendedKit}
+        onGoToPromotions={handleGoToPromotions}
+      />
+
+      {/* Mobile Native-like Bottom Navigation for Android & Mobile Web */}
+      <MobileBottomNav
+        cart={cart}
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenConsultant={() => setIsConsultantOpen(true)}
+        onNavigatePromotions={() => {
+          setSelectedCategory('kits');
+          scrollTo('produtos');
+        }}
+        onNavigateRitual={() => scrollTo('o-ritual')}
       />
     </div>
   );

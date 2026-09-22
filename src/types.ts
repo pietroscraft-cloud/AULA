@@ -16,10 +16,13 @@ export interface Product {
   benefits: string[];
   ritualStep: '1. Purificar' | '2. Nutrir' | '3. Hidratar' | '4. Proteger' | 'Tratamento Especial' | 'Kit Completo';
   image: string;
-  category: 'kits' | 'rosto' | 'limpeza' | 'solar' | 'mascaras';
+  category: 'kits' | 'rosto' | 'limpeza' | 'solar' | 'mascaras' | 'hidratacao';
   isBundle?: boolean;
   badge?: string;
   urgencyNote?: string;
+  sensoryNotes?: string;
+  texture?: string;
+  aromatherapy?: string;
 }
 
 export interface Ingredient {

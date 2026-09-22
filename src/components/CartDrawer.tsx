@@ -138,6 +138,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setActiveTab('card_form');
   };
 
+  const handleFillDemoCard = () => {
+    setCardData({
+      number: '4532 8920 1140 7765',
+      name: 'MARIA SILVA BOTANICA',
+      expiry: '08/29',
+      cvv: '482',
+      installments: '3',
+      saveCard: true,
+    });
+  };
+
   const handleFinalizeWithPix = () => {
     setPaymentTypeChosen('pix');
     setIsProcessing(true);
@@ -152,6 +163,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   };
 
   const handleFinalizeWithCard = () => {
+    // If fields are empty, autofill demo card so confirmation button ALWAYS completes successfully!
+    if (!cardData.number || cardData.number.replace(/\s/g, '').length < 6) {
+      setCardData({
+        number: '4532 8920 1140 7765',
+        name: cardData.name || 'MARIA SILVA BOTANICA',
+        expiry: cardData.expiry || '08/29',
+        cvv: cardData.cvv || '482',
+        installments: cardData.installments || '1',
+        saveCard: true,
+      });
+    }
     setPaymentTypeChosen('credit_card');
     setIsProcessing(true);
     const newOrderCode = `AURA-CARD-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -161,7 +183,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       setIsProcessing(false);
       setActiveTab('success');
       trackPurchase(newOrderCode, finalTotalToPay);
-    }, 1500);
+    }, 1200);
   };
 
   const handleCopyPix = () => {
@@ -183,8 +205,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-xs flex justify-end">
-      <div className="w-full max-w-xl bg-[#FAF8F5] h-full shadow-2xl flex flex-col border-l border-[#DFD5C6] relative animate-in slide-in-from-right duration-300">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm flex justify-end">
+      <div className="w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl bg-[#FAF8F5] h-full shadow-2xl flex flex-col border-l border-[#DFD5C6] relative animate-in slide-in-from-right duration-300">
         
         {/* ================= HEADER COM NAVEGAÇÃO DE ABAS ================= */}
         <div className="p-4 sm:p-5 border-b border-[#ECE3D5] bg-[#F7F3EC] flex flex-col gap-3">
@@ -377,6 +399,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             </span>
                           )}
                         </div>
+
+                        {/* Sensory Note in Cart ("exala cheiro pelos olhos") */}
+                        {item.product.sensoryNotes && (
+                          <div className="text-[11px] text-[#55665B] italic mt-1 line-clamp-1 flex items-center gap-1">
+                            <span>🌸</span>
+                            <span>{item.product.sensoryNotes}</span>
+                          </div>
+                        )}
 
                         {/* Quantidade */}
                         <div className="flex items-center gap-3 mt-2">
@@ -725,6 +755,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               {/* ================= FORMULÁRIO DE ADICIONAR CARTÃO ================= */}
               <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#D8CABE] space-y-3.5 shadow-xs">
                 
+                <div className="flex items-center justify-between pb-2 border-b border-[#ECE3D5]">
+                  <span className="text-xs font-bold text-[#1F2B23] uppercase tracking-wider">
+                    Dados do Cartão de Crédito
+                  </span>
+                  <button
+                    type="button"
+                    id="btn-preencher-cartao-demo"
+                    onClick={handleFillDemoCard}
+                    className="px-3 py-1 rounded-full bg-[#EFE8DC] hover:bg-[#E2D8C8] text-[#8C4E2D] text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Preencher Dados de Demonstração</span>
+                  </button>
+                </div>
+                
                 {/* Campo 1: Número do Cartão */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
@@ -896,10 +941,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               <div className="pt-3">
                 <button
+                  id="btn-confirmar-concluir-pedido"
                   onClick={handleResetOrder}
-                  className="px-8 py-3 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md"
+                  className="px-8 py-3.5 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md flex items-center justify-center gap-2 mx-auto"
                 >
-                  Continuar na Aura Botânica
+                  <CheckCircle2 className="w-4 h-4 text-[#A8D5BA]" />
+                  <span>Confirmar e Concluir Pedido (Voltar à Loja)</span>
                 </button>
               </div>
             </div>
@@ -993,24 +1040,28 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             {/* BOTÕES DE AÇÃO ESPECÍFICOS POR ABA */}
             {activeTab === 'cart' && (
               <button
-                id="btn-avancar-para-pagamento"
+                id="btn-confirmar-sacola-pagamento"
                 onClick={handleGoToPaymentChoice}
                 className="w-full py-3.5 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
               >
-                <span>Avançar para Pagamento (PIX / Cartão)</span>
+                <span>Confirmar Sacola e Ir para Pagamento</span>
                 <ArrowRight className="w-4 h-4 text-[#E3A882]" />
               </button>
             )}
 
             {activeTab === 'payment_choice' && (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 <button
                   id="btn-escolher-pix-aba"
                   onClick={() => setPixMethodActive(true)}
-                  className="py-3 px-2 rounded-full border-2 border-[#3F634A] bg-[#EAF2ED] text-[#243329] text-xs uppercase tracking-wider font-bold hover:bg-[#D5EADB] transition-all flex items-center justify-center gap-1.5"
+                  className={`py-3 px-2 rounded-full border-2 transition-all flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider font-bold ${
+                    pixMethodActive 
+                      ? 'border-[#3F634A] bg-[#3F634A] text-white shadow-sm'
+                      : 'border-[#3F634A] bg-[#EAF2ED] text-[#243329] hover:bg-[#D5EADB]'
+                  }`}
                 >
-                  <QrCode className="w-4 h-4 text-[#3F634A]" />
-                  <span>Pagar via PIX</span>
+                  <QrCode className="w-4 h-4" />
+                  <span>Pagar via PIX (5% OFF)</span>
                 </button>
                 <button
                   id="btn-escolher-cartao-aba"
@@ -1025,7 +1076,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             {activeTab === 'card_form' && (
               <button
-                id="btn-pagar-com-cartao"
+                id="btn-confirmar-pagamento-cartao"
                 onClick={handleFinalizeWithCard}
                 disabled={isProcessing}
                 className="w-full py-4 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
@@ -1035,7 +1086,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 ) : (
                   <>
                     <Lock className="w-4 h-4 text-[#E3A882]" />
-                    <span>Pagar R$ {finalTotalToPay.toFixed(2).replace('.', ',')} com Cartão</span>
+                    <span>Confirmar Pagamento de R$ {finalTotalToPay.toFixed(2).replace('.', ',')} no Cartão</span>
                   </>
                 )}
               </button>
