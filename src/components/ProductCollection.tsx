@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { PRODUCTS_DATA } from '../data/content';
-import { Product } from '../types';
+import { Product, AIPricingState } from '../types';
+import { AIPricingController } from './AIPricingController';
 import { 
   Star, ShoppingBag, Check, Sparkles, Eye, X, ShieldCheck, 
-  Truck, ArrowRight, Zap, Gift, Clock, Flame, Tag, CheckCircle2 
+  Truck, ArrowRight, Zap, Gift, Clock, Flame, Tag, CheckCircle2, Plus 
 } from 'lucide-react';
 
 interface ProductCollectionProps {
+  products?: Product[];
   onAddToCart: (product: Product) => void;
   onSelectBundle: () => void;
   onBuyNow?: (product: Product) => void;
@@ -14,9 +16,13 @@ interface ProductCollectionProps {
   onCloseProductModal?: () => void;
   selectedCategory?: string;
   onCategoryChange?: (category: string) => void;
+  pricingState?: AIPricingState;
+  isRecalibrating?: boolean;
+  onRecalibratePricing?: () => Promise<void>;
 }
 
 export const ProductCollection: React.FC<ProductCollectionProps> = ({ 
+  products = PRODUCTS_DATA,
   onAddToCart, 
   onSelectBundle,
   onBuyNow,
@@ -24,9 +30,13 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   onCloseProductModal,
   selectedCategory: externalCategory,
   onCategoryChange,
+  pricingState,
+  isRecalibrating = false,
+  onRecalibratePricing,
 }) => {
   const [internalCategory, setInternalCategory] = useState<string>('todos');
   const selectedCategory = externalCategory ?? internalCategory;
+  const [selectedTierFilter, setSelectedTierFilter] = useState<string | null>(null);
 
   const handleSelectCategory = (cat: string) => {
     setInternalCategory(cat);
@@ -81,8 +91,14 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
     }
   };
 
-  // Filter products by category
-  const filteredProducts = PRODUCTS_DATA.filter(p => {
+  // Filter products by category and AI benchmark tier
+  const filteredProducts = products.filter(p => {
+    if (selectedTierFilter) {
+      if (selectedTierFilter === 'R$ 139' && p.price !== 139 && !p.aiBenchmarkTier?.includes('139')) return false;
+      if (selectedTierFilter === 'R$ 140' && p.price !== 140 && !p.aiBenchmarkTier?.includes('140')) return false;
+      if (selectedTierFilter === 'R$ 250' && p.price !== 250 && !p.aiBenchmarkTier?.includes('250')) return false;
+      if (selectedTierFilter === 'R$ 260' && p.price !== 260 && !p.aiBenchmarkTier?.includes('260')) return false;
+    }
     if (selectedCategory === 'todos') return true;
     if (selectedCategory === 'kits') return p.category === 'kits' || p.isBundle;
     if (selectedCategory === 'limpeza') return p.category === 'limpeza';
@@ -108,11 +124,22 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   });
 
   // Featured bundle item
-  const featuredBundle = PRODUCTS_DATA.find(p => p.id === 'kit-ritual-completo-4-passos') || PRODUCTS_DATA[0];
+  const featuredBundle = products.find(p => p.id === 'kit-ritual-completo-4-passos') || products[0];
 
   return (
     <section id="produtos" className="py-16 lg:py-24 bg-[#F4EFE7] border-y border-[#E4DCCE]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Dynamic AI Pricing Benchmarks Banner */}
+        {pricingState && onRecalibratePricing && (
+          <AIPricingController
+            pricingState={pricingState}
+            isRecalibrating={isRecalibrating}
+            onRecalibrate={onRecalibratePricing}
+            selectedTierFilter={selectedTierFilter}
+            onSelectTierFilter={setSelectedTierFilter}
+          />
+        )}
         
         {/* High-Impact Sales Urgency Banner */}
         <div className="mb-10 p-4 sm:p-5 rounded-2xl bg-[#243329] text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 border border-[#3E5545]">
@@ -254,24 +281,24 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
             <div className="lg:col-span-4 bg-[#FAF8F5] p-6 sm:p-7 rounded-2xl border border-[#D5C7B3] shadow-lg flex flex-col justify-between space-y-4">
               <div>
                 <div className="flex items-baseline justify-between">
-                  <span className="text-xs text-[#7B8B81]">De R$ 588,00 por apenas:</span>
+                  <span className="text-xs text-[#7B8B81]">De R$ {featuredBundle.originalPrice || 588},00 por apenas:</span>
                   <span className="text-xs font-bold text-[#3F634A] bg-[#E8F0EA] px-2.5 py-0.5 rounded-full">
-                    Economize R$ 190,00
+                    Economize R$ {featuredBundle.savings || (featuredBundle.originalPrice ? featuredBundle.originalPrice - featuredBundle.price : 239)},00
                   </span>
                 </div>
 
                 <div className="mt-1 flex items-baseline gap-2">
                   <span className="font-serif text-3xl sm:text-4xl font-bold text-[#18231C]">
-                    R$ 398
+                    R$ {featuredBundle.price}
                   </span>
                   <span className="text-xs text-[#5D6B62]">
-                    ou <strong>6x de R$ 66,33</strong>
+                    ou <strong>{featuredBundle.installments || '6x de R$ 58,16'}</strong>
                   </span>
                 </div>
 
                 <div className="mt-2 text-xs font-medium text-[#8C4E2D] flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5" />
-                  <span>R$ 378,10 no PIX (5% OFF extra)</span>
+                  <span>R$ {featuredBundle.pixPrice || Math.round(featuredBundle.price * 0.95)} no PIX (5% OFF extra)</span>
                 </div>
               </div>
 
@@ -291,7 +318,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                   className="w-full py-3.5 rounded-full bg-[#243329] hover:bg-[#16211A] text-white text-xs font-semibold uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   <ShoppingBag className="w-4 h-4 text-[#E3A882]" />
-                  <span>Garantir Kit com 32% OFF</span>
+                  <span>Garantir Kit Completo</span>
                 </button>
 
                 <button
@@ -317,12 +344,12 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           {/* Category Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
             {[
-              { id: 'todos', label: 'Todos os Produtos', count: PRODUCTS_DATA.length },
-              { id: 'kits', label: '⭐ Kits & Ofertas', count: PRODUCTS_DATA.filter(p => p.category === 'kits' || p.isBundle).length },
-              { id: 'limpeza', label: '💧 Limpeza Diária', count: PRODUCTS_DATA.filter(p => p.category === 'limpeza').length },
-              { id: 'hidratacao', label: '🌿 Hidratação', count: PRODUCTS_DATA.filter(p => p.category === 'hidratacao' || p.category === 'rosto').length },
-              { id: 'solar', label: '☀️ Proteção Solar', count: PRODUCTS_DATA.filter(p => p.category === 'solar').length },
-              { id: 'mascaras', label: '🌸 Máscaras Faciais', count: PRODUCTS_DATA.filter(p => p.category === 'mascaras').length },
+              { id: 'todos', label: 'Todos os Produtos', count: products.length },
+              { id: 'kits', label: '⭐ Kits & Ofertas', count: products.filter(p => p.category === 'kits' || p.isBundle).length },
+              { id: 'limpeza', label: '💧 Limpeza Diária', count: products.filter(p => p.category === 'limpeza').length },
+              { id: 'hidratacao', label: '🌿 Hidratação', count: products.filter(p => p.category === 'hidratacao' || p.category === 'rosto').length },
+              { id: 'solar', label: '☀️ Proteção Solar', count: products.filter(p => p.category === 'solar').length },
+              { id: 'mascaras', label: '🌸 Máscaras Faciais', count: products.filter(p => p.category === 'mascaras').length },
             ].map(cat => {
               const active = selectedCategory === cat.id;
               return (
@@ -463,6 +490,24 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                     <div className="mt-2 text-[11px] text-[#3F634A] font-semibold flex items-center gap-1">
                       <Check className="w-3 h-3" />
                       <span>{product.urgencyNote}</span>
+                    </div>
+                  )}
+
+                  {/* AI Benchmark Tier & Comparison */}
+                  {(product.aiBenchmarkTier || product.aiComparisonNote) && (
+                    <div className="mt-2.5 p-2 rounded-xl bg-[#243329]/5 border border-[#243329]/10 text-[10px] space-y-0.5">
+                      <div className="flex items-center justify-between text-[#243329] font-bold">
+                        <span className="flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-[#8C4E2D]" />
+                          <span>{product.aiBenchmarkTier || 'Calibrado por IA'}</span>
+                        </span>
+                        <span className="text-[#3F634A] font-semibold">Preço Inteligente</span>
+                      </div>
+                      {product.aiComparisonNote && (
+                        <p className="text-[#55645A] leading-tight line-clamp-1 italic">
+                          {product.aiComparisonNote}
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -686,20 +731,3 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
     </section>
   );
 };
-
-// Helper Plus icon component
-const Plus = ({ className }: { className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="M5 12h14" />
-    <path d="M12 5v14" />
-  </svg>
-);

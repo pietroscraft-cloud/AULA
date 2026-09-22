@@ -4,9 +4,13 @@ import { Clock, Sparkles, CheckCircle2, ArrowRight, BookOpen, Wind } from 'lucid
 
 interface SelfcareRitualProps {
   onSelectProduct: (productIdOrStep: string) => void;
+  onOpenConsultant?: (tab?: 'chatbot' | 'quiz' | 'benchmark') => void;
 }
 
-export const SelfcareRitual: React.FC<SelfcareRitualProps> = ({ onSelectProduct }) => {
+export const SelfcareRitual: React.FC<SelfcareRitualProps> = ({ 
+  onSelectProduct,
+  onOpenConsultant,
+}) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const currentStep = RITUAL_STEPS[activeStep];
@@ -171,6 +175,40 @@ export const SelfcareRitual: React.FC<SelfcareRitualProps> = ({ onSelectProduct 
             </div>
           </div>
 
+        </div>
+
+        {/* AI Chatbot & Price Comparison Discovery Banner */}
+        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#243329] via-[#1F2B23] to-[#15201A] text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-[#3B4C40]">
+          <div className="space-y-2 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E3A882]/20 text-[#E3A882] text-xs font-semibold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Inteligência Artificial Botânica</span>
+            </div>
+            <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#FAF8F5]">
+              Dúvida sobre qual pilar sua pele mais necessita?
+            </h3>
+            <p className="text-xs sm:text-sm text-[#D5DED8] max-w-xl leading-relaxed">
+              Inicie uma conversa acolhedora com a <strong>Aura IA</strong> para responder o questionário conversacional interativo e receber uma rotina personalizada com <strong>28% OFF</strong>, ou consulte a pesquisa de preços de mercado de <em>La Roche-Posay, CeraVe, Vichy e SkinCeuticals</em>.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+            <button
+              id="btn-abrir-chatbot-ritual"
+              onClick={() => onOpenConsultant?.('chatbot')}
+              className="px-6 py-3.5 rounded-full bg-[#E3A882] hover:bg-[#D59871] text-[#1E2822] text-xs uppercase tracking-wider font-bold shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-[#1E2822]" />
+              <span>Questionário com Chatbot IA</span>
+            </button>
+            <button
+              id="btn-comparar-precos-ritual"
+              onClick={() => onOpenConsultant?.('benchmark')}
+              className="px-5 py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white text-xs uppercase tracking-wider font-semibold border border-white/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Comparar Preços de Mercado</span>
+            </button>
+          </div>
         </div>
 
         {/* Dedicated Educational Selfcare Wisdom Section */}

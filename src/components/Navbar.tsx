@@ -104,11 +104,12 @@ export const Navbar: React.FC<NavbarProps> = ({ cart, onOpenCart, onOpenConsulta
           {/* Right Action Icons & CTA */}
           <div className="flex items-center gap-3 sm:gap-4">
             <button
+              id="btn-nav-abrir-ia-ritual"
               onClick={onOpenConsultant}
-              className="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#D5C9B7] bg-[#F7F3EC] hover:bg-[#EFE8DC] text-xs uppercase tracking-wider text-[#2A362E] font-medium transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#D5C9B7] bg-[#F7F3EC] hover:bg-[#EFE8DC] text-xs uppercase tracking-wider text-[#2A362E] font-semibold transition-colors cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#C2744E]" />
-              Descobrir Meu Ritual
+              <span>Chatbot IA • Ritual</span>
             </button>
 
             {/* Cart Button com Destaque Diferenciado Especial */}

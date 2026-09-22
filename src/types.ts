@@ -23,6 +23,25 @@ export interface Product {
   sensoryNotes?: string;
   texture?: string;
   aromatherapy?: string;
+  aiBenchmarkTier?: 'R$ 139 (Média Aura)' | 'R$ 140 (CeraVe)' | 'R$ 250 (La Roche-Posay)' | 'R$ 260 (Vichy)';
+  aiComparisonNote?: string;
+  aiRationale?: string;
+  lastAiUpdate?: string;
+}
+
+export interface AIPricingState {
+  lastUpdated: string;
+  targetAverages: {
+    auraAverage: number;
+    ceraveAverage: number;
+    laRocheAverage: number;
+    vichyAverage: number;
+    skinCeuticalsAverage: number;
+  };
+  marketAnalysis: string;
+  totalSavingsComparedToMarket: number;
+  isCalibrating?: boolean;
+  products?: Product[];
 }
 
 export interface Ingredient {
