@@ -14,9 +14,9 @@ export interface Product {
   description: string;
   heroIngredient: string;
   benefits: string[];
-  ritualStep: '1. Purificar' | '2. Nutrir' | '3. Hidratar' | '4. Proteger' | 'Tratamento Especial' | 'Kit Completo';
+  ritualStep: '1. Purificar' | '2. Nutrir' | '3. Hidratar' | '4. Proteger' | 'Tratamento Especial' | 'Kit Completo' | '3. Regenerar' | '4. Selar & Proteger' | 'Kit Cânhamo' | string;
   image: string;
-  category: 'kits' | 'rosto' | 'limpeza' | 'solar' | 'mascaras' | 'hidratacao';
+  category: 'kits' | 'rosto' | 'limpeza' | 'solar' | 'mascaras' | 'hidratacao' | 'canhamo' | string;
   isBundle?: boolean;
   badge?: string;
   urgencyNote?: string;
@@ -49,7 +49,7 @@ export interface Ingredient {
   name: string;
   scientificName: string;
   origin: string;
-  category: 'Regeneração' | 'Hidratação' | 'Calmante' | 'Antioxidante';
+  category: 'Regeneração' | 'Hidratação' | 'Calmante' | 'Antioxidante' | 'Calmante & Barreira Cutânea' | string;
   description: string;
   benefits: string[];
   sustainableCommitment: string;

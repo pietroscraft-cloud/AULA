@@ -47,7 +47,13 @@ Nossos Pilares & Produtos:
    - Máscara Detox de Argila Verde & Carvão de Babaçu (80g) - R$ 92 (De R$ 122). Desobstrução profunda antipoluição. Aroma: Eucalipto glóbulo e hortelã verde.
    - Névoa Facial Floral Calmante com Água Termal Botânica (100ml) - R$ 72 (De R$ 92). Hidratação em bruma e aromaterapia anti-estresse. Aroma: Camomila e hidrolato de rosas.
 
-5. KITS E COMBOS PROMOCIONAIS:
+5. LINHA TERAPÊUTICA DE CÂNHAMO BOTÂNICO (CANNABIS SATIVA SEED OIL):
+   - Óleo Facial Regenerador Cânhamo Puro & Fito-Terpenos (30ml) - R$ 139 (De R$ 189). 100% puro óleo de semente de Cannabis sativa prensado a frio, rico em ômegas 3 e 6 (proporção 3:1), fito-terpenos calmantes e alfa-bisabolol. Grau comedogênico zero, alívio imediato para rosácea, vermelhidão e acne inflamatória com toque seco aveludado.
+   - Creme Reparador de Barreira Cânhamo & Fito-Ceramidas (50g) - R$ 140 (De R$ 195). Emulsão rica em óleo de cânhamo virgem, fito-ceramidas e Centella Asiática (Cica) para peles atópicas, descamativas ou pós-ácidos. Hidratação 48h.
+   - Duo Terapêutico Cânhamo Restauração Total (Óleo + Creme) - R$ 250 (De R$ 384) - 35% OFF com frete grátis. Protocolo duplo de resgate cutâneo e reparação intensiva.
+   *Nota de Pureza e Legalidade: Nossos produtos utilizam exclusivamente Óleo de Semente de Cânhamo (Cannabis Sativa Seed Oil) regulamentado, rico em ácidos graxos essenciais, 100% isento de substâncias psicotrópicas (zero THC/CBD).*
+
+6. KITS E COMBOS PROMOCIONAIS:
    - Ritual Completo Pele Radiante (4 Passos - Limpeza + Sérum + Protetor + Máscara) - R$ 349 (De R$ 540) - 35% OFF
    - Combo Equilíbrio Essencial (Limpeza + Bálsamo) - R$ 178 (De R$ 248) - 28% OFF
 
@@ -250,6 +256,39 @@ let dynamicPricingState = {
       aiBenchmarkTier: 'R$ 260 (Vichy)' as const,
       aiComparisonNote: '4 Passos completos com brinde por metade de 1 frasco SkinCeuticals (R$ 505)',
       aiRationale: 'O pacote definitivo de transformação botânica com maior economia do catálogo.',
+    },
+    'oleo-facial-canhamo-puro': {
+      id: 'oleo-facial-canhamo-puro',
+      price: 139,
+      originalPrice: 189,
+      pixPrice: 132,
+      installments: '3x de R$ 46,33 sem juros',
+      savings: 50,
+      aiBenchmarkTier: 'R$ 139 (Média Aura)' as const,
+      aiComparisonNote: 'Paridade com óleos botânicos importados (R$ 480) pelo patamar inteligente de R$ 139',
+      aiRationale: '100% Cannabis sativa seed oil puro com fito-terpenos naturais e grau comedogênico 0.',
+    },
+    'creme-reparador-canhamo-ceramidas': {
+      id: 'creme-reparador-canhamo-ceramidas',
+      price: 140,
+      originalPrice: 195,
+      pixPrice: 133,
+      installments: '3x de R$ 46,66 sem juros',
+      savings: 55,
+      aiBenchmarkTier: 'R$ 140 (CeraVe)' as const,
+      aiComparisonNote: 'Equiparado ao teto hidratante CeraVe (R$ 140) com a potência anti-inflamatória do cânhamo',
+      aiRationale: 'Cânhamo + fito-ceramidas biocompatíveis para alívio imediato de vermelhidão e rosácea.',
+    },
+    'duo-terapeutico-canhamo-restaurador': {
+      id: 'duo-terapeutico-canhamo-restaurador',
+      price: 250,
+      originalPrice: 384,
+      pixPrice: 237,
+      installments: '5x de R$ 50,00 sem juros',
+      savings: 134,
+      aiBenchmarkTier: 'R$ 250 (La Roche-Posay)' as const,
+      aiComparisonNote: 'Paridade La Roche-Posay R$ 250: Leve o protocolo completo de Cânhamo pelo preço de 1 sérum convencional',
+      aiRationale: 'Óleo de Cânhamo + Creme Reparador de Ceramidas em sinergia terapêutica com frete grátis.',
     },
   },
 };

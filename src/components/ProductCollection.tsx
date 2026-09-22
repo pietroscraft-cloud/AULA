@@ -100,6 +100,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       if (selectedTierFilter === 'R$ 260' && p.price !== 260 && !p.aiBenchmarkTier?.includes('260')) return false;
     }
     if (selectedCategory === 'todos') return true;
+    if (selectedCategory === 'canhamo') return p.category === 'canhamo' || p.heroIngredient?.toLowerCase().includes('cânhamo') || p.name.toLowerCase().includes('cânhamo');
     if (selectedCategory === 'kits') return p.category === 'kits' || p.isBundle;
     if (selectedCategory === 'limpeza') return p.category === 'limpeza';
     if (selectedCategory === 'hidratacao' || selectedCategory === 'rosto') return p.category === 'hidratacao' || p.category === 'rosto';
@@ -345,6 +346,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
             {[
               { id: 'todos', label: 'Todos os Produtos', count: products.length },
+              { id: 'canhamo', label: '🌿 Cânhamo & Calmaria', count: products.filter(p => p.category === 'canhamo' || p.heroIngredient?.toLowerCase().includes('cânhamo')).length },
               { id: 'kits', label: '⭐ Kits & Ofertas', count: products.filter(p => p.category === 'kits' || p.isBundle).length },
               { id: 'limpeza', label: '💧 Limpeza Diária', count: products.filter(p => p.category === 'limpeza').length },
               { id: 'hidratacao', label: '🌿 Hidratação', count: products.filter(p => p.category === 'hidratacao' || p.category === 'rosto').length },

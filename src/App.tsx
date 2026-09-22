@@ -16,6 +16,7 @@ import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { RoutineConsultant } from './components/RoutineConsultant';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { BotanicalBackground } from './components/BotanicalBackground';
 import { CartItem, Product, AIPricingState } from './types';
 import { PRODUCTS_DATA } from './data/content';
 import { trackAddToCart } from './utils/analytics';
@@ -177,7 +178,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#242A26] flex flex-col selection:bg-[#E2D9CC] selection:text-[#18211D] pb-16 sm:pb-0">
+    <div className="relative min-h-screen bg-[#FAF8F5] text-[#242A26] flex flex-col selection:bg-[#E2D9CC] selection:text-[#18211D] pb-16 sm:pb-0">
+      {/* Background Drawing with Opacity of Flowers, Herbs & Cannabis */}
+      <BotanicalBackground initialOpacity={0.08} />
+
       {/* Navigation Header */}
       <Navbar
         cart={cart}
